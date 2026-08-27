@@ -1,0 +1,429 @@
+:root {
+  --bg: #17191e;
+  --surface: #21242b;
+  --card: #272b33;
+  --blue: #1597f4;
+  --electric: #2943ff;
+  --text: #f4f6fa;
+  --muted: #aab2c0;
+  --border: #343a46;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at 85% 15%, #2943ff22, transparent 28rem),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 7%;
+  background: #17191ee8;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.logo img {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 20px #1597f455;
+}
+
+.logo strong,
+.logo small {
+  display: block;
+}
+
+.logo strong {
+  font-size: 1.05rem;
+}
+
+.logo small,
+.alias {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.navbar ul {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  color: var(--muted);
+}
+
+.navbar li a:hover {
+  color: var(--blue);
+}
+
+.hero,
+section {
+  width: min(1080px, 88%);
+  margin: auto;
+}
+
+.hero {
+  min-height: 680px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  margin-bottom: 18px;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+h1 {
+  max-width: 800px;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: .98;
+  letter-spacing: -5px;
+}
+
+h1 span {
+  color: var(--blue);
+}
+
+.hero p:not(.eyebrow):not(.alias) {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.stack {
+  color: var(--text) !important;
+  font-weight: 700;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 11px 17px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--card);
+  transition: .2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--blue);
+}
+
+.btn.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+section {
+  padding: 85px 0;
+}
+
+h2 {
+  margin-bottom: 22px;
+  font-size: 2.5rem;
+  letter-spacing: -.04em;
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
+section > p,
+.project-card p,
+.game-card p,
+.gaming > p {
+  max-width: 720px;
+  color: var(--muted);
+}
+
+.languages,
+.gaming ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.languages span,
+.gaming li {
+  padding: 8px 14px;
+  border: 1px solid #1597f455;
+  border-radius: 999px;
+  background: #1597f41c;
+  list-style: none;
+}
+
+.project-card,
+.game-card {
+  margin-top: 20px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 12px 35px #0003;
+}
+
+.project-card {
+  border-color: #3159c8;
+  background: linear-gradient(135deg, #242c44, var(--card));
+}
+
+.project-card small {
+  display: block;
+  margin-top: 18px;
+  color: var(--blue);
+}
+
+.project-card .btn {
+  margin-top: 20px;
+}
+
+.gaming h3 {
+  margin-top: 28px;
+}
+
+.contact {
+  text-align: center;
+}
+
+.contact .btn {
+  margin: 12px 5px;
+}
+
+footer {
+  padding: 28px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: .9rem;
+}
+
+@media (max-width: 700px) {
+  .navbar ul {
+    display: none;
+  }
+
+  .hero {
+    min-height: 570px;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    letter-spacing: -3px;
+  }
+
+  section {
+    padding: 65px 0;
+  }
+}
+body {
+  background:
+    linear-gradient(135deg, transparent 0 49%, #ffffff03 50% 50.2%, transparent 50.3%),
+    var(--bg);
+}
+
+.navbar {
+  padding: 12px max(5%, calc((100% - 1180px) / 2));
+}
+
+.logo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.logo strong {
+  letter-spacing: -.02em;
+}
+
+.hero,
+section {
+  width: min(1180px, 88%);
+}
+
+.hero {
+  min-height: 620px;
+  padding-top: 80px;
+}
+
+.hero::after {
+  width: 220px;
+  height: 220px;
+  right: 12%;
+  opacity: .16;
+}
+
+.eyebrow {
+  display: inline-block;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px solid #1597f455;
+  border-radius: 6px;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 760px;
+  font-size: clamp(3.4rem, 8vw, 6rem);
+  letter-spacing: -0.065em;
+}
+
+section {
+  padding: 72px 0;
+}
+
+section h2 {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 2rem;
+}
+
+.project-card,
+.game-card {
+  max-width: 760px;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.project-card {
+  border-left: 3px solid var(--blue);
+  background: var(--surface);
+}
+
+.languages span,
+.gaming li {
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.btn {
+  border-radius: 7px;
+  font-size: .92rem;
+}
+
+footer {
+  font-size: .8rem;
+}
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: center;
+  gap: 70px;
+}
+
+.hero-logo {
+  display: grid;
+  place-items: center;
+}
+
+.hero-logo img {
+  width: min(100%, 340px);
+  height: auto;
+  border-radius: 28px;
+  box-shadow: 0 25px 70px #2943ff55;
+}
+
+@media (max-width: 800px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 70px;
+  }
+
+  .hero-logo {
+    order: -1;
+    justify-content: start;
+  }
+
+  .hero-logo img {
+    width: 150px;
+    border-radius: 18px;
+  }
+}
+.hero-content {
+  min-width: 0;
+}
+
+.hero-content h1 {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 800px) {
+  .hero-content {
+    width: 100%;
+  }
+
+  .hero-logo {
+    order: 2;
+  }
+}
+section {
+  padding-top: 54px;
+  padding-bottom: 54px;
+}
+
+.hero {
+  min-height: 465px;
+  padding-top: 60px;
+}
+
+h2 {
+  margin-bottom: 16px;
+}
+
+.project-card,
+.game-card {
+  margin-top: 15px;
+  padding: 20px;
+}
+
+.gaming h3 {
+  margin-top: 21px;
+}
+
+footer {
+  padding: 21px;
+}
