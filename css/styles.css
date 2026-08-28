@@ -96,6 +96,19 @@ a {
   box-shadow: 0 0 20px #1597f455;
 }
 
+@keyframes logo-shiver {
+  0%, 100% { transform: translate(0, 0) rotate(0); filter: none; }
+  20% { transform: translate(-2px, 1px) rotate(-2deg); filter: saturate(1.8) hue-rotate(12deg); }
+  40% { transform: translate(2px, -1px) rotate(2deg); filter: saturate(1.4) hue-rotate(-18deg); }
+  60% { transform: translate(-1px, 2px) skewX(-3deg); filter: contrast(1.5); }
+  80% { transform: translate(1px, -1px) skewX(3deg); filter: saturate(1.8) hue-rotate(18deg); }
+}
+
+.logo img:hover,
+.hero-logo img:hover {
+  animation: logo-shiver .24s steps(2, end) infinite;
+}
+
 .logo strong,
 .logo small {
   display: block;
@@ -272,6 +285,84 @@ footer {
   color: var(--muted);
   text-align: center;
   font-size: .9rem;
+}
+
+.footer-clue {
+  display: block;
+}
+
+#lane-drop-unlocked {
+  display: none;
+  margin-left: 8px;
+  color: var(--blue);
+  font-size: 1rem;
+}
+
+#lane-drop-unlocked.is-unlocked {
+  display: inline-block;
+}
+
+.lane-terminal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: #050609cc;
+  backdrop-filter: blur(5px);
+}
+
+.lane-terminal.is-visible {
+  display: grid;
+}
+
+.terminal-window {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 28px;
+  border: 1px solid #1597f4;
+  border-radius: 8px;
+  background: #0d1118;
+  color: #d8e1ed;
+  box-shadow: 0 0 35px #1597f455, 0 20px 80px #000;
+  font: 500 .9rem/1.7 "Courier New", monospace;
+}
+
+.terminal-title {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.terminal-progress {
+  color: #6df7a6;
+}
+
+.terminal-error {
+  color: #ff7185;
+}
+
+.terminal-launch {
+  display: inline-block;
+  margin-top: 10px;
+  color: #d8fa6d;
+  font-weight: 700;
+}
+
+.terminal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 1.4rem/1 "Courier New", monospace;
+  cursor: pointer;
+}
+
+.terminal-close:hover {
+  color: var(--text);
 }
 
 @media (max-width: 700px) {

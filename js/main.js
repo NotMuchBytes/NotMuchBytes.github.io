@@ -2,27 +2,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameUrl = 'Top-Down-drive/index.html';
     let logoClicks = 0;
     let speechTimeout;
+    let clickResetTimeout;
+    const unlockedGameLink = document.getElementById('lane-drop-unlocked');
+    const terminal = document.getElementById('lane-terminal');
+    const terminalClose = document.getElementById('terminal-close');
+
+    if (localStorage.getItem('laneDropDiscovered') === 'true') {
+        unlockedGameLink.classList.add('is-unlocked');
+    }
+
+    function showLogoMessage(logo, message) {
+        const speechBubble = logo.parentElement.querySelector('.logo-speech');
+        speechBubble.textContent = message;
+        speechBubble.classList.add('is-visible');
+        clearTimeout(speechTimeout);
+        speechTimeout = setTimeout(() => {
+            speechBubble.classList.remove('is-visible');
+        }, 3500);
+    }
 
     document.querySelectorAll('.logo img, .hero-logo img').forEach(logo => {
         logo.addEventListener('click', event => {
             event.preventDefault();
             logoClicks += 1;
+            clearTimeout(clickResetTimeout);
+            clickResetTimeout = setTimeout(() => {
+                logoClicks = 0;
+            }, 30000);
 
             if (logoClicks === 3) {
-                const speechBubble = logo.parentElement.querySelector('.logo-speech');
-                speechBubble.textContent = 'ok let me take you home';
-                speechBubble.classList.add('is-visible');
-                clearTimeout(speechTimeout);
-                speechTimeout = setTimeout(() => {
-                    speechBubble.classList.remove('is-visible');
-                }, 3500);
+                showLogoMessage(logo, 'Why are you clicking that?');
             }
 
             if (logoClicks === 5) {
-                window.open(gameUrl, '_blank', 'noopener');
+                showLogoMessage(logo, 'Seriously?');
+            }
+
+            if (logoClicks === 7) {
+                showLogoMessage(logo, 'Fine. You found it.');
+                localStorage.setItem('laneDropDiscovered', 'true');
+                unlockedGameLink.classList.add('is-unlocked');
+                terminal.classList.add('is-visible');
                 logoClicks = 0;
             }
         });
+    });
+
+    terminalClose.addEventListener('click', () => {
+        terminal.classList.remove('is-visible');
+    });
+
+    terminal.addEventListener('click', event => {
+        if (event.target === terminal) {
+            terminal.classList.remove('is-visible');
+        }
     });
 
     const projectsContainer = document.getElementById('projects-container');
