@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const gameUrl = 'https://raw.githack.com/NotMuchBytes/Top-Down-drive/4f89ee62edfd75dc7af7020b47cda103e47a8f90/index.html';
+    const gameUrl = 'Top-Down-drive/index.html';
     let logoClicks = 0;
+    let speechTimeout;
 
     document.querySelectorAll('.logo img, .hero-logo img').forEach(logo => {
         logo.addEventListener('click', event => {
@@ -11,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const speechBubble = logo.parentElement.querySelector('.logo-speech');
                 speechBubble.textContent = 'ok let me take you home';
                 speechBubble.classList.add('is-visible');
+                clearTimeout(speechTimeout);
+                speechTimeout = setTimeout(() => {
+                    speechBubble.classList.remove('is-visible');
+                }, 3500);
             }
 
             if (logoClicks === 5) {
