@@ -13,6 +13,14 @@ const projects = [
         status: "In Development",
         githubLink: "https://github.com/NotMuchBytes/ForesightChess"
     },
+    {
+        name: "Top-Down Drive",
+        description: "A fast-paced top-down endless driving game where you dodge traffic, collect stars, and survive an increasingly fast road.",
+        technologies: ["HTML", "CSS", "JavaScript"],
+        status: "Playable",
+        githubLink: "https://github.com/NotMuchBytes/Top-Down-drive",
+        playLink: "https://raw.githack.com/NotMuchBytes/Top-Down-drive/4f89ee62edfd75dc7af7020b47cda103e47a8f90/index.html"
+    },
     // Additional projects can be added here
 ];
 
