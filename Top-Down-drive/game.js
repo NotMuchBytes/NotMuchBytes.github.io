@@ -58,6 +58,27 @@ window.addEventListener('keydown', (event) => {
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
 startButton.addEventListener('click', startGame);
+canvas.addEventListener('pointerdown', (event) => {
+  if (!state.running) {
+    startGame();
+    return;
+  }
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const left = x < rect.width * 0.45;
+  const right = x > rect.width * 0.55;
+  const accelerate = y < rect.height * 0.55;
+  setKeyState('a', left);
+  setKeyState('d', right);
+  if (accelerate) setKeyState('w', true);
+});
+canvas.addEventListener('pointerup', () => {
+  keys.delete('a'); keys.delete('d'); keys.delete('w');
+});
+canvas.addEventListener('pointerleave', () => {
+  keys.delete('a'); keys.delete('d'); keys.delete('w');
+});
 window.addEventListener('resize', resize);
 
 function formatScore(value) { return String(Math.floor(value)).padStart(5, '0'); }
