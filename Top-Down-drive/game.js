@@ -14,12 +14,14 @@ const pauseButton = document.querySelector('.pause-button');
 const keys = new Set();
 const state = { running: false, paused: false, crashing: false, crashTime: 0, score: 0, best: Number(localStorage.getItem('lane-drop-best') || 0), distance: 0, spawn: 0 };
 const player = { x: 0, y: 0, width: 30, height: 52, steer: 0 };
+const pointer = { x: 0, active: false };
 const traffic = [];
 const stars = [];
 const debris = [];
 let width = 0; let height = 0; let roadLeft = 0; let laneWidth = 0; let animationId;
 
 bestEl.textContent = formatScore(state.best);
+function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
 function setKeyState(key, active) {
   if (active) keys.add(key);
   else keys.delete(key);
@@ -58,9 +60,23 @@ window.addEventListener('keydown', (event) => {
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
 startButton.addEventListener('click', startGame);
+function updatePointerFromEvent(event) {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  pointer.active = true;
+  pointer.x = clamp(x, roadLeft + player.width / 2 + 8, roadLeft + laneWidth * 3 - player.width / 2 - 8);
+}
+canvas.addEventListener('pointerenter', (event) => {
+  pointer.active = true;
+  updatePointerFromEvent(event);
+});
+canvas.addEventListener('pointermove', (event) => {
+  if (state.running || pointer.active) updatePointerFromEvent(event);
+});
 canvas.addEventListener('pointerdown', (event) => {
   if (!state.running) {
     startGame();
+    updatePointerFromEvent(event);
     return;
   }
   const rect = canvas.getBoundingClientRect();
@@ -72,12 +88,15 @@ canvas.addEventListener('pointerdown', (event) => {
   setKeyState('a', left);
   setKeyState('d', right);
   if (accelerate) setKeyState('w', true);
+  updatePointerFromEvent(event);
 });
 canvas.addEventListener('pointerup', () => {
   keys.delete('a'); keys.delete('d'); keys.delete('w');
+  pointer.active = true;
 });
 canvas.addEventListener('pointerleave', () => {
   keys.delete('a'); keys.delete('d'); keys.delete('w');
+  pointer.active = true;
 });
 window.addEventListener('resize', resize);
 
@@ -147,9 +166,14 @@ function update(dt) {
   const accelerating = keys.has('w') || keys.has('arrowup');
   const baseSpeed = 245 + Math.min(state.distance * 2.2, 220);
   const speed = baseSpeed * (accelerating ? 1.18 : .82);
-  const direction = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0);
-  player.x += direction * 255 * dt;
-  player.x = Math.max(roadLeft + player.width / 2 + 8, Math.min(roadLeft + laneWidth * 3 - player.width / 2 - 8, player.x));
+  if (pointer.active) {
+    const pointerTarget = clamp(pointer.x, roadLeft + player.width / 2 + 8, roadLeft + laneWidth * 3 - player.width / 2 - 8);
+    player.x += (pointerTarget - player.x) * Math.min(1, dt * 12);
+  } else {
+    const direction = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0);
+    player.x += direction * 255 * dt;
+    player.x = Math.max(roadLeft + player.width / 2 + 8, Math.min(roadLeft + laneWidth * 3 - player.width / 2 - 8, player.x));
+  }
   state.distance += speed * dt / 100;
   state.score += speed * dt / 10; scoreEl.textContent = formatScore(state.score); speedEl.textContent = `${(speed / 245).toFixed(1)}x`;
   state.spawn -= dt; if (state.spawn <= 0) { spawnItem(); state.spawn = Math.max(.5, .95 - state.distance / 180); }
