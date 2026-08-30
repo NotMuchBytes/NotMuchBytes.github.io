@@ -56,10 +56,15 @@ for (const button of touchButtons) {
 window.addEventListener('keydown', (event) => {
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) event.preventDefault();
   if (event.key === ' ') { if (state.running) state.paused = !state.paused; if (pauseButton) pauseButton.textContent = state.paused ? '▶' : '⏸'; return; }
-  keys.add(event.key.toLowerCase());
+  const key = event.key.toLowerCase();
+  if (['a', 'd', 'arrowleft', 'arrowright'].includes(key)) pointer.active = false;
+  keys.add(key);
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
 startButton.addEventListener('click', startGame);
+function hasKeyboardSteering() {
+  return keys.has('a') || keys.has('d') || keys.has('arrowleft') || keys.has('arrowright');
+}
 function updatePointerFromEvent(event) {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -67,10 +72,12 @@ function updatePointerFromEvent(event) {
   pointer.x = clamp(x, roadLeft + player.width / 2 + 8, roadLeft + laneWidth * 3 - player.width / 2 - 8);
 }
 canvas.addEventListener('pointerenter', (event) => {
+  if (hasKeyboardSteering()) return;
   pointer.active = true;
   updatePointerFromEvent(event);
 });
 canvas.addEventListener('pointermove', (event) => {
+  if (hasKeyboardSteering()) return;
   if (state.running || pointer.active) updatePointerFromEvent(event);
 });
 canvas.addEventListener('pointerdown', (event) => {
@@ -92,11 +99,11 @@ canvas.addEventListener('pointerdown', (event) => {
 });
 canvas.addEventListener('pointerup', () => {
   keys.delete('a'); keys.delete('d'); keys.delete('w');
-  pointer.active = true;
+  pointer.active = false;
 });
 canvas.addEventListener('pointerleave', () => {
   keys.delete('a'); keys.delete('d'); keys.delete('w');
-  pointer.active = true;
+  pointer.active = false;
 });
 window.addEventListener('resize', resize);
 
@@ -163,16 +170,18 @@ function update(dt) {
     if (state.crashTime > 1.35) endGame();
     return;
   }
+  const keyboardSteering = hasKeyboardSteering();
   const accelerating = keys.has('w') || keys.has('arrowup');
   const baseSpeed = 245 + Math.min(state.distance * 2.2, 220);
   const speed = baseSpeed * (accelerating ? 1.18 : .82);
-  if (pointer.active) {
-    const pointerTarget = clamp(pointer.x, roadLeft + player.width / 2 + 8, roadLeft + laneWidth * 3 - player.width / 2 - 8);
-    player.x += (pointerTarget - player.x) * Math.min(1, dt * 12);
-  } else {
+  if (keyboardSteering) {
+    pointer.active = false;
     const direction = (keys.has('d') || keys.has('arrowright') ? 1 : 0) - (keys.has('a') || keys.has('arrowleft') ? 1 : 0);
     player.x += direction * 255 * dt;
     player.x = Math.max(roadLeft + player.width / 2 + 8, Math.min(roadLeft + laneWidth * 3 - player.width / 2 - 8, player.x));
+  } else if (pointer.active) {
+    const pointerTarget = clamp(pointer.x, roadLeft + player.width / 2 + 8, roadLeft + laneWidth * 3 - player.width / 2 - 8);
+    player.x += (pointerTarget - player.x) * Math.min(1, dt * 12);
   }
   state.distance += speed * dt / 100;
   state.score += speed * dt / 10; scoreEl.textContent = formatScore(state.score); speedEl.textContent = `${(speed / 245).toFixed(1)}x`;
